@@ -64,18 +64,26 @@ const canvas = document.createElement('canvas')
 
 document.body.appendChild(canvas)
 
-const context = assrt(canvas.getContext('2d'))
+const context = assrt(
+  canvas.getContext('2d'), 
+  'Failed to create 2D canvas context' 
+)
 
 // 
 
 let screenWidth = innerWidth
 let screenHeight = innerHeight
+let rays: Ray[] = seq( screenWidth, () =>({ rads: 0, distance: 0, vertical: false }))
+let frame1 = 0
+let frame2 = 0
+let elapsed = 0
 
 //
 
 const resize = () => {
   canvas.width = screenWidth = innerWidth
   canvas.height = screenHeight = innerHeight
+  rays = seq( screenWidth, () =>({ rads: 0, distance: 0, vertical: false }))
 }
 
 const clearScreen = () => {
@@ -229,10 +237,11 @@ const getRays = () => {
   const numberOfRays = screenWidth
   const radStep = FOV / numberOfRays
 
-  return seq(
-    numberOfRays,
-    i => castRay(initialRads + i * radStep)
-  )
+  for( let i = 0; i < screenWidth; i++ ){
+    rays[ i ] = castRay(initialRads + i * radStep)
+  }
+
+  return rays
 }
 
 const movePlayer = () => {
@@ -258,7 +267,13 @@ const renderScene = (rays: Ray[]) => {
   })
 }
 
+let fpsBuffer = Array<number>(60).fill(60)
+
 const gameLoop = (time: number) => {
+  frame2 = time
+  elapsed = (frame2 - frame1)
+  frame1 = time
+
   clearScreen()
   movePlayer()
 
@@ -266,6 +281,15 @@ const gameLoop = (time: number) => {
 
   renderScene(rays)
   renderMinimap(0, 0, 0.75, rays)
+
+  fpsBuffer.push(1000 / elapsed)
+  fpsBuffer = fpsBuffer.slice(1)
+
+  const fps = fpsBuffer.reduce((prev, curr) => prev + curr) / fpsBuffer.length
+
+  context.fillStyle = '#ff0'
+  context.font = '32px sans-serif'
+  context.fillText(`${fps | 0}`.padStart(3, ' ') + 'fps', screenWidth - 96, 32 )
 
   requestAnimationFrame(gameLoop)
 }

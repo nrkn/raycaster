@@ -27,6 +27,10 @@ declare const canvas: HTMLCanvasElement;
 declare const context: CanvasRenderingContext2D;
 declare let screenWidth: number;
 declare let screenHeight: number;
+declare let rays: Ray[];
+declare let frame1: number;
+declare let frame2: number;
+declare let elapsed: number;
 declare const resize: () => void;
 declare const clearScreen: () => void;
 declare const renderMinimap: (posX: number | undefined, posY: number | undefined, scale: number, rays: Ray[]) => void;
@@ -38,4 +42,5 @@ declare const fixFishEye: (distance: number, rads: number, playerRads: number) =
 declare const getRays: () => Ray[];
 declare const movePlayer: () => void;
 declare const renderScene: (rays: Ray[]) => void;
+declare let fpsBuffer: number[];
 declare const gameLoop: (time: number) => void;
