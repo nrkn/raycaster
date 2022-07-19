@@ -1,0 +1,41 @@
+declare type Ray = {
+    rads: number;
+    distance: number;
+    vertical: boolean;
+};
+declare const assrt: <T>(value: T | null | undefined, message?: string) => T;
+declare const seq: <T>(length: number, cb: (i: number) => T) => T[];
+declare const toRadians: (deg: number) => number;
+declare const distance: (x1: number, y1: number, x2: number, y2: number) => number;
+declare const map: number[][];
+declare const CELL_SIZE = 32;
+declare const FOV: number;
+declare const COLORS: {
+    floor: string;
+    ceiling: string;
+    wall: string;
+    wallDark: string;
+    rays: string;
+};
+declare const player: {
+    x: number;
+    y: number;
+    rads: number;
+    speed: number;
+};
+declare const canvas: HTMLCanvasElement;
+declare const context: CanvasRenderingContext2D;
+declare let screenWidth: number;
+declare let screenHeight: number;
+declare const resize: () => void;
+declare const clearScreen: () => void;
+declare const renderMinimap: (posX: number | undefined, posY: number | undefined, scale: number, rays: Ray[]) => void;
+declare const outOfMapBounds: (x: number, y: number) => boolean;
+declare const getVCollision: (rads: number) => Ray;
+declare const getHCollision: (rads: number) => Ray;
+declare const castRay: (rads: number) => Ray;
+declare const fixFishEye: (distance: number, rads: number, playerRads: number) => number;
+declare const getRays: () => Ray[];
+declare const movePlayer: () => void;
+declare const renderScene: (rays: Ray[]) => void;
+declare const gameLoop: (time: number) => void;
