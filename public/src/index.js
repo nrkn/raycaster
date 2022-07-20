@@ -171,16 +171,20 @@ const movePlayer = () => {
 };
 const renderScene = (rays) => {
     rays.forEach((ray, i) => {
+        // draw wall
         const distance = fixFishEye(ray.distance, ray.rads, player.rads);
         const wallHeight = ((CELL_SIZE * 5) / distance) * 277;
         context.fillStyle = ray.vertical ? COLORS.wallDark : COLORS.wall;
         context.fillRect(i, screenHeight / 2 - wallHeight / 2, 1, wallHeight);
+        // draw floor
         context.fillStyle = COLORS.floor;
         context.fillRect(i, screenHeight / 2 + wallHeight / 2, 1, screenHeight / 2 - wallHeight / 2);
+        // draw ceil
         context.fillStyle = COLORS.ceiling;
         context.fillRect(i, 0, 1, screenHeight / 2 - wallHeight / 2);
     });
 };
+//
 let fpsBuffer = Array(60).fill(60);
 const gameLoop = (time) => {
     frame2 = time;
@@ -199,20 +203,21 @@ const gameLoop = (time) => {
     context.fillText(`${fps | 0}`.padStart(3, ' ') + 'fps', screenWidth - 96, 32);
     requestAnimationFrame(gameLoop);
 };
+//
 addEventListener('resize', resize);
 addEventListener('click', () => {
     canvas.requestPointerLock();
 });
 addEventListener('keydown', e => {
-    if (e.key === 'ArrowUp') {
+    if (e.code === 'KeyW') {
         player.speed = 2;
     }
-    if (e.key === 'ArrowDown') {
+    if (e.code === 'KeyS') {
         player.speed = -2;
     }
 });
 addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    if (e.code === 'KeyW' || e.code === 'KeyS') {
         player.speed = 0;
     }
 });
